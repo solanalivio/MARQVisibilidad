@@ -3,39 +3,130 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#f5f3ee" />
-    <meta name="description" content="Conocé los proyectos y a las personas que los hicieron posibles." />
-    <title>Proyectos — Estudio MARQ</title>
+    <meta name="theme-color" content="#f4f0ea" />
+    <meta name="description" content="Estudio MARQ: arquitectura y desarrollo inmobiliario en Resistencia, Chaco. Conocé los proyectos y a las personas que los hacen posibles." />
+    <title>Estudio MARQ — Creamos valor</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
     <script src="app.js" defer></script>
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
+    <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js" defer></script>
+    <script src="map3d.js" defer></script>
   </head>
   <body>
+    <div class="intro-loader" id="intro-loader" aria-hidden="true">
+      <img class="loader-logo" src="https://estudiomarq.com.ar/wp-content/uploads/2024/12/estudiomarq.svg" alt="" />
+      <span class="loader-tagline">Resistencia · Chaco</span>
+      <span class="loader-bar"><span></span></span>
+    </div>
+    <div class="scroll-progress" aria-hidden="true"><span id="scroll-progress"></span></div>
+
     <header class="site-header">
-      <a class="wordmark" href="#inicio" aria-label="MARQ, inicio"><strong>marQ</strong><small>CREAMOS VALOR</small></a>
+      <a class="wordmark" href="#inicio" aria-label="Estudio MARQ, inicio"><img src="https://estudiomarq.com.ar/wp-content/uploads/2024/12/estudiomarq.svg" alt="MARQ, creamos valor" /></a>
       <nav class="main-nav" aria-label="Navegación principal">
-        <a href="#inicio">Home</a>
-        <a href="#estudio">Equipo</a>
-        <a href="#estudio">Servicios</a>
-        <a href="#proyectos" class="active">Proyectos</a>
-        <a href="#estudio">Inversiones</a>
-        <a href="#proyectos">Inmuebles</a>
-        <a href="#estudio">Novedades</a>
+        <a href="#mapa">Mapa</a>
+        <a href="#proyectos">Proyectos</a>
+        <a href="#servicios">Servicios</a>
         <a href="#contacto">Contacto</a>
       </nav>
-      <div class="header-actions"><a class="header-contact" href="#proyectos"><span aria-hidden="true">▦</span> Ver propiedades</a><button class="mode-toggle" id="mode-toggle" type="button">Acceso empresa ↗</button></div>
+      <div class="header-actions"><a class="header-contact" href="#proyectos"><span aria-hidden="true">▦</span> Ver propiedades</a><button class="mode-toggle" id="mode-toggle" type="button">MARQ Contigo ↗</button></div>
       <button class="menu-toggle" aria-label="Abrir navegación" aria-expanded="false"><span></span><span></span></button>
     </header>
 
-    <section class="company-view" id="company-view" aria-label="Espacio de trabajo de la empresa" hidden></section>
+    <section class="company-view" id="company-view" aria-label="MARQ Contigo, espacio de seguimiento comercial" hidden></section>
 
     <main id="inicio">
-      <section class="intro" id="proyectos">
-        <div class="intro-grid">
-          <h1>CREAMOS ESPACIOS<br /><strong>DE CALIDAD</strong></h1>
-          <div class="intro-copy"><p>- PROYECTOS DISEÑADOS PARA QUE VIVAS A PLENO -</p></div>
+      <div class="page-width"><div class="showroom-banner" id="showroom-banner" hidden></div></div>
+
+      <!-- Hero -->
+      <section class="hero" id="hero" aria-label="Estudio MARQ">
+        <div class="hero-media" aria-hidden="true">
+          <img class="is-active" src="https://estudiomarq.com.ar/wp-content/uploads/2024/07/contacto-04-1.webp" alt="Torre Natalini al atardecer" data-caption="Torre Natalini" data-meta="2024 · 26 pisos" />
+          <img src="https://estudiomarq.com.ar/wp-content/uploads/2024/08/torre-panorama-proyecto.webp" alt="Render de Torre Panorama" data-caption="Torre Panorama" data-meta="En preventa · 25.000 m²" />
+          <img src="https://estudiomarq.com.ar/wp-content/uploads/2024/07/uno-proyecto.webp" alt="Fachada de Uno Boulevard" data-caption="Uno Boulevard" data-meta="2017 · Av. Sarmiento" />
+          <img src="https://estudiomarq.com.ar/wp-content/uploads/2024/07/gaba-proyecto.webp" alt="Edificio GABA" data-caption="Edificio GABA" data-meta="Live &amp; work · el estudio" />
+          <img src="https://estudiomarq.com.ar/wp-content/uploads/2024/08/torre-nbch-proyecto.webp" alt="Render de Torre NBCH" data-caption="Torre NBCH" data-meta="En obra · Pellegrini 761" />
+          <img src="https://estudiomarq.com.ar/wp-content/uploads/2024/07/brisas-del-norte-proyecto.webp" alt="Muelle sobre la laguna de Brisas del Norte" data-caption="Brisas del Norte" data-meta="Loteo con laguna y muelle" />
+        </div>
+        <div class="hero-shade" aria-hidden="true"></div>
+        <div class="hero-spotlight" aria-hidden="true"></div>
+        <div class="hero-grain" aria-hidden="true"></div>
+        <span class="hero-watermark" aria-hidden="true">MARQ</span>
+
+        <div class="hero-inner page-width">
+          <p class="hero-kicker" data-reveal>
+            <span class="hero-live" aria-hidden="true"></span>
+            Estudio MARQ ·
+            <span class="hero-rotator" aria-live="polite"><span class="is-active">Arquitectura</span><span>Desarrollo inmobiliario</span><span>Urbanismo</span><span>Interiorismo</span><span>Administración</span></span>
+          </p>
+          <h1 class="hero-title" data-split>
+            <span class="line"><span>La ciudad</span></span>
+            <span class="line"><span>que viene</span></span>
+            <span class="line"><span>comienza <em>acá.</em></span></span>
+          </h1>
+          <div class="hero-bottom">
+            <div class="hero-lead-wrap" data-reveal style="--d: 0.9s">
+              <p class="hero-lead">Hace 18 años diseñamos, desarrollamos y administramos los edificios y barrios que cambiaron el perfil de Resistencia.</p>
+              <div class="hero-actions">
+                <a class="btn-primary btn-light magnetic" href="#proyectos">Explorar proyectos <span>↓</span></a>
+                <a class="btn-text btn-text-light" href="#mapa">Ver las obras en el mapa <span>↗</span></a>
+              </div>
+            </div>
+            <div class="hero-index" data-reveal style="--d: 1.05s">
+              <div class="hero-now"><span class="hero-count" id="hero-count">01 / 06</span><strong id="hero-caption">Torre Natalini</strong><span id="hero-meta">2024 · 26 pisos</span></div>
+              <div class="hero-bars" id="hero-bars" role="group" aria-label="Elegir obra"></div>
+            </div>
+          </div>
+        </div>
+        <a class="scroll-cue" href="#mapa" aria-label="Seguir bajando"><span>Scroll</span><i></i></a>
+      </section>
+
+      <!-- Marquesina -->
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee-track">
+          <span>Torre Natalini</span><i>✦</i><span>MARQ Collection</span><i>✦</i><span>Uno Boulevard</span><i>✦</i><span>Torre Vista</span><i>✦</i><span>Torre Panorama</span><i>✦</i><span>Pueblo Mío</span><i>✦</i><span>Gran Arboledas</span><i>✦</i><span>Brisas del Norte</span><i>✦</i><span>Torre NBCH</span><i>✦</i><span>Edificio GABA</span><i>✦</i><span>Distrito Horizonte</span><i>✦</i>
+          <span>Torre Natalini</span><i>✦</i><span>MARQ Collection</span><i>✦</i><span>Uno Boulevard</span><i>✦</i><span>Torre Vista</span><i>✦</i><span>Torre Panorama</span><i>✦</i><span>Pueblo Mío</span><i>✦</i><span>Gran Arboledas</span><i>✦</i><span>Brisas del Norte</span><i>✦</i><span>Torre NBCH</span><i>✦</i><span>Edificio GABA</span><i>✦</i><span>Distrito Horizonte</span><i>✦</i>
+        </div>
+      </div>
+
+      <!-- Mapa 3D de Resistencia -->
+      <section class="city" id="mapa" aria-label="Mapa de las obras de MARQ en Resistencia">
+        <div class="city-head page-width">
+          <div class="eyebrow" data-reveal><span class="eyebrow-line"></span> RESISTENCIA, OBRA POR OBRA</div>
+          <h2 class="section-title" data-reveal>La ciudad que <em>fuimos construyendo.</em></h2>
+          <p class="section-lead" data-reveal style="--d: 0.1s">Seguro pasaste por alguno de estos edificios. Recorré el mapa, tocá cada obra en dorado y conocé su historia.</p>
+        </div>
+        <div class="city-stage page-width">
+          <div class="city-map" id="city-map"></div>
+          <aside class="map-list" id="map-list" aria-label="Obras en el mapa"></aside>
+          <article class="map-card" id="map-card" hidden></article>
+          <div class="map-timeline">
+            <p class="map-caption" id="map-caption" aria-live="polite"></p>
+            <input type="range" id="map-timeline" min="0" max="4" step="1" value="4" aria-label="Línea de tiempo de las obras" />
+            <div class="map-ticks"></div>
+          </div>
+          <div class="map-tools">
+            <button type="button" id="map-tour" class="map-tour">▶ Recorrer las obras</button>
+            <button type="button" id="map-overview">Ver toda la región</button>
+            <button type="button" id="map-zoom-in" aria-label="Acercar">+</button>
+            <button type="button" id="map-zoom-out" aria-label="Alejar">−</button>
+          </div>
+          <p class="map-note">Alturas aproximadas. Lo que viene se ve en un dorado más claro; los loteos, en su zona aproximada.</p>
+        </div>
+      </section>
+
+      <!-- Proyectos -->
+      <section class="intro page-width" id="proyectos">
+        <div class="projects-head">
+          <div class="eyebrow" data-reveal><span class="eyebrow-line"></span> PROYECTOS</div>
+          <h2 class="section-title" data-reveal>Encontrá tu lugar <em>en la ciudad.</em></h2>
+        </div>
+        <div class="profile-picker" role="group" aria-label="¿Qué estás buscando?">
+          <p class="profile-question"><span class="eyebrow-line"></span> ¿QUÉ ESTÁS BUSCANDO?</p>
+          <button class="profile-card" type="button" data-profile="vivienda" aria-pressed="false" data-reveal><span class="profile-kicker">Para vivir</span><strong>Busco mi próxima vivienda</strong><span>Los proyectos pensados para vivir y cómo se accede a cada uno.</span><span class="profile-arrow" aria-hidden="true">↗</span></button>
+          <button class="profile-card" type="button" data-profile="inversion" aria-pressed="false" data-reveal style="--d: 0.08s"><span class="profile-kicker">Para invertir</span><strong>Busco oportunidades de inversión</strong><span>Los proyectos para invertir y en qué etapa está cada uno.</span><span class="profile-arrow" aria-hidden="true">↗</span></button>
         </div>
         <div class="project-toolbar">
           <div class="filters" role="group" aria-label="Filtrar proyectos">
@@ -50,24 +141,42 @@
         </div>
       </section>
 
-      <section class="projects-section" aria-label="Listado de proyectos">
+      <section class="projects-section page-width" aria-label="Listado de proyectos">
         <div class="projects-grid" id="projects-grid"></div>
-        <div class="end-note"><span>01 — 06</span><span>DISEÑADOS PARA VIVIRLOS</span><span>MARQ © 2026</span></div>
+        <div class="end-note"><span id="end-note-count">01 — 17</span><span>DISEÑADOS PARA VIVIRLOS</span><span>MARQ © 2026</span></div>
       </section>
 
-      <section class="closing" id="estudio">
-        <div class="eyebrow"><span class="eyebrow-line"></span> UNA IDEA SE HACE ENTRE MUCHAS PERSONAS</div>
-        <div class="closing-grid"><h2>Detrás de cada<br /><em>proyecto,</em> hay un equipo.</h2><p>Creemos que los buenos espacios nacen de buenas ideas compartidas. Acá podés conocer a quienes aportaron su mirada para hacerlos realidad.</p></div>
-        <a class="text-link" href="#proyectos">Volver a los proyectos <span>↑</span></a>
+      <!-- Servicios -->
+      <section class="services page-width" id="servicios">
+        <div class="eyebrow" data-reveal><span class="eyebrow-line"></span> SERVICIOS</div>
+        <h2 class="section-title" data-reveal>Todo el recorrido, <em>de la idea a la llave.</em></h2>
+        <div class="services-grid">
+          <article class="service" data-reveal><span>01</span><h3>Desarrollo inmobiliario</h3><p>Analizamos el terreno, la normativa y la demanda, y armamos fideicomisos al costo a la medida de cada edificio.</p></article>
+          <article class="service" data-reveal style="--d: 0.06s"><span>02</span><h3>Arquitectura</h3><p>Edificios, casas, locales, consultorios, gimnasios y estaciones de servicio, con documentación ejecutiva para licitar la obra.</p></article>
+          <article class="service" data-reveal style="--d: 0.12s"><span>03</span><h3>Interiorismo</h3><p>Iluminación, mobiliario y materialidad para que cada espacio se viva como fue pensado.</p></article>
+          <article class="service" data-reveal style="--d: 0.18s"><span>04</span><h3>Urbanismo y loteos</h3><p>Barrios que conservan el bosque nativo y el agua: Pueblo Mío, Gran Arboledas, Brisas del Norte.</p></article>
+          <article class="service" data-reveal style="--d: 0.24s"><span>05</span><h3>Gestión y administración</h3><p>Permisos municipales, administración fiduciaria y gestión de consorcios una vez que el edificio toma vida.</p></article>
+          <article class="service service-highlight" data-reveal style="--d: 0.3s"><span>Nuevo</span><h3>Estudio de prefactibilidad</h3><p>¿Tenés un terreno? Analizamos qué se puede construir, qué demanda hay y si los números cierran.</p><a class="btn-text" data-web-visit href="https://wa.me/5493624119351?text=Hola%2C%20tengo%20un%20terreno%20y%20quiero%20consultar%20por%20un%20estudio%20de%20prefactibilidad." target="_blank" rel="noopener">Consultar <span>↗</span></a></article>
+        </div>
       </section>
+
     </main>
 
     <footer id="contacto">
-      <a class="wordmark footer-mark" href="#inicio"><strong>marQ</strong><small>CREAMOS VALOR</small></a>
-      <div class="footer-copy"><span>¿TENÉS UN PROYECTO EN MENTE?</span><a href="mailto:hola@estudiomarq.com.ar">Hablemos <span>↗</span></a></div>
-      <div class="footer-meta"><span>Resistencia, Chaco · Argentina</span><span>© MARQ 2026</span></div>
+      <div class="footer-cta page-width">
+        <span class="eyebrow"><span class="eyebrow-line"></span> CONTACTO</span>
+        <h2 data-reveal>¿Tenés un proyecto <em>en mente?</em></h2>
+        <a class="footer-big magnetic" data-web-visit href="https://wa.me/5493624119351?text=Hola%2C%20quiero%20hacer%20una%20consulta%20al%20estudio." target="_blank" rel="noopener">Hablemos <span>↗</span></a>
+      </div>
+      <div class="footer-grid page-width">
+        <div><img class="footer-logo" src="https://estudiomarq.com.ar/wp-content/uploads/2024/12/estudiomarq.svg" alt="MARQ" /><p>Arquitectura y desarrollo inmobiliario.</p></div>
+        <div><h4>Estudio</h4><p>Remedios de Escalada 259<br />Resistencia, Chaco · Argentina</p></div>
+        <div><h4>Contacto</h4><p><a href="tel:+5493624119351">+54 9 362 411 9351</a><br /><a href="mailto:info@estudiomarq.com.ar">info@estudiomarq.com.ar</a></p></div>
+        <div><h4>Redes</h4><p><a href="https://www.instagram.com/estudio.marq/" target="_blank" rel="noopener">Instagram</a><br /><a href="https://www.facebook.com/marq.estudio/" target="_blank" rel="noopener">Facebook</a><br /><a href="https://www.youtube.com/channel/UChqgLdfHLP1wzIMaYeQ3Y9A" target="_blank" rel="noopener">YouTube</a></p></div>
+      </div>
+      <div class="footer-meta page-width"><span>© Estudio MARQ 2026</span><span>Prototipo UTN · información pública de estudiomarq.com.ar</span></div>
     </footer>
-    <a class="whatsapp" href="#contacto" aria-label="Contactar por WhatsApp">◔</a>
+    <a class="whatsapp" href="#contacto" target="_blank" rel="noopener" aria-label="Contactar por WhatsApp"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a8 8 0 0 1-11.8 7L4 20l1.5-4.1A8 8 0 1 1 20 11.5Z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5"/></svg></a>
 
     <div class="modal" id="team-modal" aria-hidden="true">
       <div class="modal-backdrop" data-close-modal></div>
