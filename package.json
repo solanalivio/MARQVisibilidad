@@ -1,0 +1,22 @@
+{
+  "name": "marqvisibilidad",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Estudio MARQ: sitio público, mapa 3D y CRM MARQ Contigo (Next.js + NestJS + PostgreSQL).",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build:packages": "npm run build -w @marq/shared && npm run build -w @marq/map3d",
+    "build": "npm run build:packages && npm run build -w @marq/api && npm run build -w @marq/web",
+    "typecheck": "npm run build:packages && npm run typecheck --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "dev:api": "npm run start:dev -w @marq/api",
+    "dev:web": "npm run dev -w @marq/web"
+  }
+}

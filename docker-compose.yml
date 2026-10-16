@@ -1,0 +1,98 @@
+services:
+  # -------------------------------------------------------------------
+  # 1. Base de Datos Relacional: PostgreSQL 16 ACID
+  # -------------------------------------------------------------------
+  db:
+    image: postgres:16-alpine
+    container_name: marq_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-marq_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-marq_secure_pass_2026}
+      POSTGRES_DB: ${POSTGRES_DB:-marq_db}
+    ports:
+      - "${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-marq_user} -d ${POSTGRES_DB:-marq_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - marq_network
+
+  # -------------------------------------------------------------------
+  # 2. Migrador y Seeder One-Shot (Prisma ORM)
+  # -------------------------------------------------------------------
+  migrate:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+      target: builder
+    container_name: marq_migrate
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-marq_user}:${POSTGRES_PASSWORD:-marq_secure_pass_2026}@db:5432/${POSTGRES_DB:-marq_db}?schema=public
+    command: >
+      sh -c "cd /app/apps/api && npx prisma db push && npm run seed"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - marq_network
+
+  # -------------------------------------------------------------------
+  # 3. Backend API: NestJS 11 + Prisma ORM + Auditoría & RBAC
+  # -------------------------------------------------------------------
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: marq_api
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      DATABASE_URL: postgresql://${POSTGRES_USER:-marq_user}:${POSTGRES_PASSWORD:-marq_secure_pass_2026}@db:5432/${POSTGRES_DB:-marq_db}?schema=public
+      JWT_SECRET: ${JWT_SECRET:-super_secret_marq_jwt_key_enterprise_2026_change_in_production}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-super_secret_marq_refresh_key_enterprise_2026_change_in_prod}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000,http://127.0.0.1:3000}
+      PUBLIC_WEB_URL: ${PUBLIC_WEB_URL:-http://localhost:3000}
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    networks:
+      - marq_network
+
+  # -------------------------------------------------------------------
+  # 4. Frontend Web: Next.js 15 + React 19 + Mapa 3D + CRM MARQ Contigo
+  # -------------------------------------------------------------------
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: marq_web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      API_INTERNAL_URL: http://api:3001
+      NEXT_PUBLIC_MAP_STYLE: https://tiles.openfreemap.org/styles/positron
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - marq_network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  marq_network:
+    driver: bridge

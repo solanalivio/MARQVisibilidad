@@ -1,0 +1,11 @@
+node_modules
+npm-debug.log
+.git
+.gitignore
+.next
+apps/web/.next
+apps/api/dist
+packages/shared/dist
+packages/map3d/dist
+.DS_Store
+*.log
