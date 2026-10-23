@@ -59,8 +59,7 @@
   /* ---------- Piezas comunes de las hojas ---------- */
   .light { background: var(--cream); color: var(--ink); }
   .dark { background: var(--dark); color: #ece8e1; }
-  .grid::before { content: ""; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(var(--gl) 1px, transparent 1px), linear-gradient(90deg, var(--gl) 1px, transparent 1px); background-size: 97.5px 103.4px; }
-  .m.grid::before { background-size: 50px 50.6px; }
+  .grid::before { content: none; }
   .light.grid { --gl: rgba(20,20,20,.05); } .dark.grid { --gl: rgba(255,255,255,.04); }
   .sheet::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .07; mix-blend-mode: overlay; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
   .corner { position: absolute; width: 18px; height: 18px; border: 0 solid currentColor; opacity: .45; z-index: 3; }
